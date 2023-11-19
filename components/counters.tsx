@@ -1,24 +1,20 @@
-// Example from https://beta.reactjs.org/learn
+import { useState } from "react";
 
-import { useState } from 'react'
-import styles from './counters.module.css'
-
-function MyButton() {
-  const [count, setCount] = useState(0)
+export default function Counter() {
+  const [count, setCount] = useState(0);
 
   function handleClick() {
-    setCount(count + 1)
+    setCount(count + 1);
   }
 
   return (
     <div>
-      <button onClick={handleClick} className={styles.counter}>
+      <button
+        onClick={handleClick}
+        className="border border-gray-300 rounded px-2 py-1 my-3"
+      >
         Clicked {count} times
       </button>
     </div>
-  )
-}
-
-export default function MyApp() {
-  return <MyButton />
+  );
 }
