@@ -3,104 +3,151 @@ title: Account Types
 description: Anchor Account Type Examples
 ---
 
+## Account Types
+
 Minimal reference examples for Anchor [account types](https://docs.rs/anchor-lang/latest/anchor_lang/accounts/index.html).
 
-export const accountTypes = [
-  {
-    type: `Account<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Account",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Account",
-    description: "Account container that checks ownership on deserialization"
-  },
-  {
-    type: `AccountInfo<'info>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountInfo",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountInfo",
-    description: "AccountInfo can be used as a type but Unchecked Account should be used instead"
-  },
-  {
-    type: `AccountLoader<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountLoader",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountLoader",
-    description: "Type facilitating on demand zero copy deserialization"
-  },
-  {
-    type: `Box<Account<'info, T>>\nBox<InterfaceAccount<'info, T>>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Box",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Box",
-    description: "Box type to save stack space"
-  },
-  {
-    type: `Interface<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Interface",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Interface",
-    description: "Type validating that the account is one of a set of given Programs"
-  },
-  {
-    type: `InterfaceAccount<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/InterfaceAccount",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/InterfaceAccount",
-    description: "Account container that checks ownership on deserialization"
-  },
-  {
-    type: `Option<Account<'info, T>>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Option",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Option",
-    description: "Option type for optional accounts"
-  },
-  {
-    type: `Program<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Program",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Program",
-    description: "Type validating that the account is the given Program"
-  },
-  {
-    type: `Signer<'info>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Signer",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Signer",
-    description: "Type validating that the account signed the transaction"
-  },
-  {
-    type: `SystemAccount<'info>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/SystemAccount",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/SystemAccount",
-    description: "Type validating that the account is owned by the system program"
-  },
-  {
-    type: `Sysvar<'info, T>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/Sysvar",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Sysvar",
-    description: "Type validating that the account is a sysvar and deserializing it"
-  },
-  {
-    type: `UncheckedAccount<'info>`,
-    example: "https://github.com/solana-developers/anchor-examples/tree/main/account-types/UncheckedAccount",
-    example2: "https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/UncheckedAccount",
-    description: "Explicit wrapper for AccountInfo types to emphasize that no checks are performed"
-  }
-];
+### `Account`
 
+Account container that checks ownership on deserialization.
 
-{<table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Example</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {accountTypes.map((item, index) => (
-        <tr key={index}>
-          <td>
-            <pre>{item.type}</pre>
-          </td>
-          <td>
-            <a href={item.example}>Github</a><br/>
-            <a href={item.example2}>Solpg</a>
-          </td>
-          <td>{item.description}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>}
+```rust filename="Type"
+Account<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Account)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Account)
+
+### `AccountInfo`
+
+AccountInfo can be used as a type but Unchecked Account should be used instead.
+
+```rust filename="Type"
+AccountInfo<'info>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountInfo)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountInfo)
+
+### `AccountLoader`
+
+Type facilitating on demand zero copy deserialization.
+
+```rust filename="Type"
+AccountLoader<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountLoader)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/AccountLoader)
+
+### `Box`
+
+Box type to save stack space.
+
+```rust filename="Type"
+Box<Account<'info, T>>
+Box<InterfaceAccount<'info, T>>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Box)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Box)
+
+### `Interface`
+
+Type validating that the account is one of a set of given Programs.
+
+```rust filename="Type"
+Interface<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Interface)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Interface)
+
+### `InterfaceAccount`
+
+Account container that checks ownership on deserialization.
+
+```rust filename="Type"
+InterfaceAccount<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/InterfaceAccount)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/InterfaceAccount)
+
+### `Option`
+
+Option type for optional accounts.
+
+```rust filename="Type"
+Option<Account<'info, T>>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Option)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Option)
+
+### `Program`
+
+Type validating that the account is the given Program.
+
+```rust filename="Type"
+Program<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Program)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Program)
+
+### `Signer`
+
+Type validating that the account signed the transaction.
+
+```rust filename="Type"
+Signer<'info>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Signer)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Signer)
+
+### `SystemAccount`
+
+Type validating that the account is owned by the system program.
+
+```rust filename="Type"
+SystemAccount<'info>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/SystemAccount)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/SystemAccount)
+
+### `Sysvar`
+
+Type validating that the account is a sysvar and deserializing it.
+
+```rust filename="Type"
+Sysvar<'info, T>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/Sysvar)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/Sysvar)
+
+### `UncheckedAccount`
+
+Explicit wrapper for AccountInfo types to emphasize that no checks are performed.
+
+```rust filename="Type"
+UncheckedAccount<'info>
+```
+
+Examples:
+[Playground](https://beta.solpg.io/https://github.com/solana-developers/anchor-examples/tree/main/account-types/UncheckedAccount)
+[Github](https://github.com/solana-developers/anchor-examples/tree/main/account-types/UncheckedAccount)

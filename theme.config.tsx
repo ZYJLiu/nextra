@@ -20,7 +20,7 @@ const config: DocsThemeConfig = {
     text: "Nextra Docs Template",
   },
   editLink: {
-    text: "Edit this page on GitHub →",
+    text: "Help improve this page on GitHub →",
   },
   feedback: {
     content: "Question? Give us feedback →",
