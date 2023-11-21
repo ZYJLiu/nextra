@@ -20,6 +20,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  remark-mdx-disable-explicit-jsx:
+    specifier: ^0.1.0
+    version: 0.1.0
 
 devDependencies:
   '@types/node':
@@ -2843,6 +2846,14 @@ packages:
       mdast-util-math: 2.0.2
       micromark-extension-math: 2.0.2
       unified: 10.1.2
+    dev: false
+
+  /remark-mdx-disable-explicit-jsx@0.1.0:
+    resolution: {integrity: sha512-NC7NUbu4bExZnsWDTJE3UhBRZujW3gyqMufhTHn2GHhZ5LetWzyieyuZerBPdSniLx4d7QKDbf+d3u/qmMGyaQ==}
+    dependencies:
+      '@types/hast': 2.3.4
+      unified: 10.1.2
+      unist-util-visit: 4.1.1
     dev: false
 
   /remark-mdx@2.1.5:

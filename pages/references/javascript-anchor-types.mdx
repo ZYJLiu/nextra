@@ -53,7 +53,7 @@ export const typeMappings = [
   }
 ];
 
-{<table>
+<table>
   <thead>
     <tr>
       <th>Rust Type</th>
@@ -66,8 +66,8 @@ export const typeMappings = [
       <tr key={index}>
         <td><pre>{item.rustType}</pre></td>
         <td><pre>{item.jsType}</pre></td>
-        <td><pre dangerouslySetInnerHTML={{ __html: item.example }}></pre></td>
+        <td><pre>{item.example}</pre></td>
       </tr>
     ))}
   </tbody>
-</table>}
+</table>
