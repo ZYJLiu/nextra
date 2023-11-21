@@ -1,0 +1,22 @@
+{
+    "account-constraints": "Account Constraints",
+    "account-types": "Account Types",
+    "javascript-anchor-types": "Javascript Anchor Types",
+    "anchor-toml": "Anchor.toml",
+    "space": "Space",
+    "cli": "CLI",
+    "avm": "AVM",
+    "core-library": {
+        "title": "Core Library",
+        "href": "https://docs.rs/anchor-lang/latest/anchor_lang/",
+        "newWindow": true
+    },
+    "rust-client-library": {
+        "title": "Rust Client Library",
+        "href": "https://docs.rs/anchor-client/latest/anchor_client/",
+        "newWindow": true
+    },
+    "publishing-source": "Publishing Source",
+    "verifiable-builds": "Verifiable Builds",
+    "security-exploits": "Sealevel Attacks"
+}

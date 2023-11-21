@@ -1,77 +1,14 @@
 {
-  "-- Prologue": {
-    "type": "separator",
-    "title": "Prologue"
-  },
-  "release-notes": "Release Notes",
-  "changelog": "Change Log",
-  "contribution-guide": "Contribution Guide",
+  "index": "",
 
-  "-- Getting Started": {
-    "type": "separator",
-    "title": "Getting Started"
-  },
-  "index": "Introduction",
-  "quickstart": "Quickstart",
-  "installation": "Installation",
-  "hello-world": "Hello World",
-  "intro-to-solana": "Intro to Solana",
+  "prologue": "Prologue",
+  "getting-started": "Getting Started",
+  "core-concepts": "Core Concepts",
+  "references": "References",
 
-  "-- Core Concepts": {
+  "-- Random": {
     "type": "separator",
-    "title": "Core Concepts"
-  },
-  "high-level-overview": "High Level Overview",
-  "the-accounts-struct": "The Accounts Struct",
-  "the-program-module": "The Program Module",
-  "errors": "Errors",
-  "cross-program-invocation": "Cross Program Invocation",
-  "program-derived-address": "Program Derived Address",
-
-  "-- Guides": {
-    "type": "separator",
-    "title": "Guides"
-  },
-  "publishing-source": "Publishing Source",
-  "verifiable-builds": "Verifiable Builds",
-
-  "-- References": {
-    "type": "separator",
-    "title": "References"
-  },
-  "account-constraints": "Account Constraints",
-  "account-types": "Account Types",
-  "anchor-toml": "Anchor.toml",
-  "cli": "CLI",
-  "avm": "AVM",
-  "core-library": {
-    "title": "Core Library",
-    "href": "https://docs.rs/anchor-lang/latest/anchor_lang/",
-    "newWindow": true
-  },
-  "rust-client-library": {
-    "title": "Rust Client Library",
-    "href": "https://docs.rs/anchor-client/latest/anchor_client/",
-    "newWindow": true
-  },
-  "javascript-anchor-types": "Javascript Anchor Types",
-  "space": "Space",
-
-  "-- Projects": {
-    "type": "separator",
-    "title": "Projects"
-  },
-  "tic-tac-toe": "Tic Tac Toe",
-
-  "-- Common Security Exploits": {
-    "type": "separator",
-    "title": "Common Security Exploits"
-  },
-  "security-exploits": "Sealevel Attacks",
-
-  "-- Misc": {
-    "type": "separator",
-    "title": "Misc"
+    "title": "Ignore Below"
   },
   "misc": "Misc",
 

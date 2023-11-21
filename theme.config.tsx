@@ -10,12 +10,12 @@ const config: DocsThemeConfig = {
     </>
   ),
   project: {
-    link: "https://github.com/coral-xyz/anchor",
+    link: "https://github.com/ZYJLiu/nextra",
   },
   chat: {
     link: "https://discord.gg/NHHGSXAnXk",
   },
-  docsRepositoryBase: "https://github.com/ZYJLiu/nextra",
+  docsRepositoryBase: "https://github.com/ZYJLiu/nextra/tree/main",
   footer: {
     text: "Nextra Docs Template",
   },
@@ -27,7 +27,7 @@ const config: DocsThemeConfig = {
     labels: "feedback",
   },
   sidebar: {
-    defaultMenuCollapseLevel: 1,
+    defaultMenuCollapseLevel: 2,
   },
   darkMode: true,
 };
