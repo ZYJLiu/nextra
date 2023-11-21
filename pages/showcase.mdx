@@ -1,0 +1,53 @@
+---
+title: Showcase
+---
+
+import { Cards } from 'nextra/components'
+
+{<h1 className="mt-10 mb-4 text-center text-[2.5rem] font-bold tracking-tight">Showcase</h1>}
+
+{<p className="mb-16 text-center text-lg text-gray-500 dark:text-gray-400">Open
+source projects build with Anchor</p>}
+
+<Cards>
+  <ShowcaseCard title="Drift Protocol" href="https://github.com/drift-labs/protocol-v2">
+    <>![Drift Protocol](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Mango Markets" href="https://github.com/blockworks-foundation/mango-v4">
+    <>![Mango Markets](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Marginfi" href="https://github.com/mrgnlabs/marginfi-v2/">
+    <>![Marginfi](/showcase/acheron.png)</>
+  </ShowcaseCard>
+    <ShowcaseCard title="Marinade Finance" href="https://github.com/marinade-finance/liquid-staking-program">
+    <>![Marinade Finance](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="UXD" href="https://github.com/UXDProtocol/uxd-program">
+    <>![UXD](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Helium" href="https://github.com/helium/helium-program-library">
+    <>![Helium](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Jito" href="https://github.com/jito-foundation/jito-programs">
+    <>![Jito](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Orca" href="https://github.com/orca-so/whirlpools">
+    <>![Orca](/showcase/acheron.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Jet Protocol" href="https://github.com/jet-lab/jet-v2">
+    <>![Jet Protocol](/showcase/acheron.png)</>
+  </ShowcaseCard>
+</Cards>
+
+export const ShowcaseCard = Object.assign(
+  // Copy card component and add default props
+  Cards.Card.bind(),
+  {
+    displayName: 'ShowcaseCard',
+    defaultProps: {
+      image: true,
+      arrow: true,
+      target: '_blank'
+    }
+  }
+)

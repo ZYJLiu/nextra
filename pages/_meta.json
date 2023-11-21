@@ -16,6 +16,10 @@
     "title": "About",
     "type": "page"
   },
+  "showcase": {
+    "title": "Showcase",
+    "type": "page"
+  },
   "contact": {
     "title": "Contact ↗",
     "type": "page",
