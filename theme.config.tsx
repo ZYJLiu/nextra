@@ -17,7 +17,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: "https://github.com/ZYJLiu/nextra/tree/main",
   footer: {
-    text: "Nextra Docs Template",
+    text: "",
   },
   editLink: {
     text: "Help improve this page on GitHub →",
@@ -27,9 +27,14 @@ const config: DocsThemeConfig = {
     labels: "feedback",
   },
   sidebar: {
-    defaultMenuCollapseLevel: 2,
+    defaultMenuCollapseLevel: Infinity,
+    toggleButton: true,
+    // autoCollapse: true,
   },
   darkMode: true,
+  toc: {
+    backToTop: true,
+  },
 };
 
 export default config;

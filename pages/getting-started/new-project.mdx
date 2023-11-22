@@ -1,0 +1,113 @@
+---
+title: Create New Anchor Project
+description: This page describes how to create a new Anchor project.
+---
+import { FileTree, Steps } from 'nextra/components'
+
+## Getting Started with Anchor
+
+This section provides a basic step-by-step guide to create, build, and test your project using Anchor.  
+Ensure you've completed the required [installations](installation) before proceeding.
+
+<Steps>
+
+### Initialize the Project
+
+To start, you need to initialize your project. Replace `[project-name]` with your desired project name.
+This command creates a new Anchor project with the specified name.
+
+```shell filename="Terminal" copy
+anchor init [project-name]
+```
+
+Once the project is initialized, change your current directory to the newly created project folder:
+
+```shell filename="Terminal" copy
+cd [project-name]
+```
+
+### Build the Program
+
+With your project set up, the next step is to build it.
+This process compiles your program and prepares it for deployment or testing.
+
+```shell filename="Terminal" copy
+anchor build
+```
+
+### Test the Program
+
+Finally, to verify that everything is working as expected, run the tests for your project:
+
+```shell filename="Terminal" copy
+anchor test
+```
+
+</Steps>
+
+## Project File Structure
+
+Upon creating a new Anchor workspace, a structured directory is set up with several important files and folders.
+
+<FileTree>
+    <FileTree.Folder name=".anchor">
+        <FileTree.File name="program-logs" />
+    </FileTree.Folder>
+    <FileTree.Folder name="app"/>
+    <FileTree.Folder name="migrations" />
+    <FileTree.Folder name="programs" defaultOpen>
+        <FileTree.Folder name="src" defaultOpen>
+            <FileTree.File name="lib.rs" />
+        </FileTree.Folder>
+        <FileTree.File name="Cargo.toml" />
+        <FileTree.File name="Xargo.toml" />
+    </FileTree.Folder>
+    <FileTree.Folder name="target">
+        <FileTree.Folder name="deploy">
+            <FileTree.File name="[project-name]-keypair.json" /> 
+        </FileTree.Folder>
+        <FileTree.Folder name="idl">
+            <FileTree.File name="[project-name].json" /> 
+        </FileTree.Folder>
+        <FileTree.Folder name="types">
+            <FileTree.File name="[project-name].ts" /> 
+        </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="tests">
+        <FileTree.File name="[project-name].ts" /> 
+    </FileTree.Folder>
+    <FileTree.File name="Anchor.toml" /> 
+    <FileTree.File name="Cargo.toml" /> 
+    <FileTree.File name="package.json" /> 
+</FileTree>
+
+Below is an overview of the key files in the workspace:
+
+### Programs Folder
+
+The programs folder contains your project's Anchor programs. Each program is a subfolder containing a `Cargo.toml` file and a `src` folder with a `lib.rs` file.
+The `lib.rs` file contains the program's code, while the `Cargo.toml` file contains the program's dependencies.
+
+### Tests Folder
+
+The tests folder contains test files for your project. Each test is a `.ts` file that contains a test suite for a program.
+
+### Target Folder
+
+The target folder contains the compiled output of your project. It includes the following subfolders:
+
+- **deploy**: Contains the keypair for your program.
+- **idl**: Contains the IDL for your program.
+- **types**: Contains the TypeScript version of your program's IDL.
+
+### Anchor.toml File
+
+The [`Anchor.toml`]() file configures workspace-wide settings for your programs.
+
+### .anchor Folder
+
+Includes a `program-logs` file that contains the program's transaction logs from last run of test files in the `tests` folder.
+
+### App Folder
+
+The app folder is an empty folder designated for your frontend code (if you're using a monorepo structure).

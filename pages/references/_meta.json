@@ -2,9 +2,9 @@
     "account-constraints": "Account Constraints",
     "account-types": "Account Types",
     "rust-js-type": "Rust JS Type Mapping",
-    "anchor-toml": "Anchor.toml",
     "space": "Space",
-    "cli": "CLI",
+    "anchor-toml": "Anchor.toml",
+    "cli": "CLI Usage",
     "avm": "AVM",
     "core-library": {
         "title": "Core Library",

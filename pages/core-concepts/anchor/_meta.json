@@ -1,0 +1,8 @@
+{
+    "program": "Program Structure",
+    "client": "Client Interaction",
+    "program-derived-address": "Program Derived Address",
+    "cross-program-invocation": "Cross Program Invocation",
+    "error": "Errors",
+    "events": "Events"
+}

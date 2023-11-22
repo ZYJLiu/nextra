@@ -1,10 +1,19 @@
 {
   "index": "",
-
-  "prologue": "Prologue",
+  "quickstart": "Quickstart",
   "getting-started": "Getting Started",
   "core-concepts": "Core Concepts",
+  "guides": "Guides",
   "references": "References",
+  "updates": "Version Updates",
+  "contribution-guide": "Contribution Guide",
+
+  "-- Placeholder": {
+    "type": "separator",
+    "title": "Placeholder"
+  },
+
+  "placeholder": "Revise",
 
   "-- Random": {
     "type": "separator",

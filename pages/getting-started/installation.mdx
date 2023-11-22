@@ -4,31 +4,37 @@ description: Anchor - Installation
 ---
 import { Callout } from 'nextra/components'
 
-## Rust
+## Prequisites
 
-Go [here](https://www.rust-lang.org/tools/install) to install Rust.
+Begin by installing the following dependencies:
 
-<Callout >
-  We recommend reading chapters 1-9 of the [Rust book](https://doc.rust-lang.org/book/title-page.html) which cover the basics of using Rust (Most of the time you don't need advanced Rust to write anchor programs).
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/getting-started/install)
+- [Rust](https://www.rust-lang.org/tools/install)
+
+We recommend reading chapters 1-9 of the [Rust book](https://doc.rust-lang.org/book/title-page.html) which cover the basics of using Rust. Most of the time you don't need advanced Rust to write anchor programs.
+
+<Callout>
+  If you are using a Windows machine, you must first install [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install).  
+  Next, install [Ubuntu](https://ubuntu.com/download/desktop). All prerequisite dependencies should then be installed using the Linux terminal.
 </Callout>
 
-## Solana
 
-Go [here](https://docs.solana.com/cli/install-solana-cli-tools) to install Solana and then run `solana-keygen new` to create a keypair at the default location. Anchor uses this keypair to run your program tests.
+## Install Solana
+
+Install the [Solana CLI Tools](https://docs.solana.com/cli/install-solana-cli-tools) and then run `solana-keygen new` to create a local keypair at the default location.
+
+By default, Anchor uses this local keypair to run your program tests.
 
 <Callout >
     We also recommend checking out the official [Solana developers page](https://solana.com/developers).
 </Callout>
 
-## Yarn
+## Install Anchor
 
-Go [here](https://yarnpkg.com/getting-started/install) to install Yarn.
+### Anchor Version Manager (recommended)
 
-## Anchor
-
-### Installing using Anchor version manager (avm) (recommended)
-
-Anchor version manager is a tool for using multiple versions of the anchor-cli. It will require the same dependencies as building from source. It is recommended you uninstall the NPM package if you have it installed.
+Anchor version manager (avm) is a tool for using multiple versions of the anchor-cli. It will require the same dependencies as building from source. It is recommended you uninstall the NPM package if you have it installed.
 
 Install `avm` using Cargo. Note this will replace your `anchor` binary if you had one installed.
 
@@ -55,11 +61,12 @@ Verify the installation.
 anchor --version
 ```
 
-### Install using pre-build binary on x86_64 Linux
+### Prebuilt Binaries
 
-Anchor binaries are available via an NPM package [`@coral-xyz/anchor-cli`](https://www.npmjs.com/package/@coral-xyz/anchor-cli). Only `x86_64` Linux is supported currently, you must build from source for other OS'.
+Anchor binaries are available via an NPM package [`@coral-xyz/anchor-cli`](https://www.npmjs.com/package/@coral-xyz/anchor-cli). 
+Only `x86_64` Linux is supported currently, you must build from source for other OS'.
 
-### Build from source for other operating systems without avm
+### Build from source
 
 We can also use Cargo to install the CLI directly. Make sure that the `--tag` argument uses the version you want (the version here is just an example).
 

@@ -1,5 +1,11 @@
 {
-    "one": "One",
+    "one": {
+        "title": "IFrame",
+        "theme": {
+            "layout": "full",
+            "sidebar": false
+          }
+    },
     "two": "Two",
     "nested-pages":"Nested Pages"
 }
