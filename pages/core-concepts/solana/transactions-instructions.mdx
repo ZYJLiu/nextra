@@ -1,19 +1,66 @@
+import { Callout } from 'nextra/components'
+
 ## Transactions and Instructions
 
 ### Transaction
 
+On Solana, we send transactions to interact with the network from the client. 
+Let’s begin by expanding on the details that make up a transaction:
+
+1. **Message:** At its core, a transaction has a message. This message includes:
+   - **Instructions**: An array of instructions to be executed.
+   - **Recent Blockhash**: Acts as a timestamp for the transaction.
+   - **Feepayer**: Specifies the transaction fee payer.
+2. **Signers:** An array of signers included on the transaction.
+
 ![Transaction](/solana/transaction-instruction/transaction.png)
+
+<Callout>
+ By default, the first signer on the transaction is set as the fee payer unless otherwise specified.
+</Callout>
+
+For simplicity, a transaction can be thought of a request to process one or multiple instructions.
 
 ![Instructions](/solana/transaction-instruction/instructions.png)
 
+Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
+Transactions are processed "atomically", meaning that all instructions either complete successfully or, if one fails, the entire transaction is rejected.
+
 ### Instruction
+
+An instruction is a request for a program to perform a specific operation and is the smallest contiguous unit of execution logic in a program. 
+
+Each instruction must include 3 pieces of information:
+
+- **Program address**: Specifies the program being invoked
+- **Accounts**: Lists every account the instruction reads from or writes to, including other programs
+- **Instruction Data**: Specifies which instruction on the program to invoke, plus any additional data required by the instruction
 
 ![Instruction](/solana/transaction-instruction/instruction.png)
 
+For every account required by an instruction, the following information must be specified:
+
+- **Account address**: The on-chain address of an account
+- **is_signer**: Specify if the account is required as a signer on the transaction
+- **is_writable**: Specify if the account data will be modified
+
+This information is referred to as the `AccountMeta`.
+
 ![AccountMeta](/solana/transaction-instruction/accountmeta.png)
+
+By clearly identifying the accounts needed for an instruction and specifying whether each account is writable, transaction processing can be parallelized.
+This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
+
+Note that the details for building specific program instructions are often abstracted away by client libraries and frameworks like Anchor.
+However, it is helpful to understand the underlying structure of transactions and instructions.
 
 ### SOL Transfer Example
 
+Below is a diagram representing a transaction with a single instruction to transfer SOL from a sender to a receiver.
+
 ![SOL Transfer](/solana/transaction-instruction/sol-transfer.png)
+
+Once the transaction is sent, the System Program is invoked to process the transfer instruction.
+The System Program then updates the lamport balances of both the sender and receiver accounts accordingly.
 
 ![SOL Transfer Diagram](/solana/transaction-instruction/sol-transfer2.png)

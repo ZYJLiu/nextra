@@ -1,0 +1,153 @@
+import { Tabs } from 'nextra/components'
+
+### IDL
+
+Anchor generates an IDL file which is a JSON representation of the program and used to simplify the process of interacting with the program from the client.
+
+<Tabs items={['instruction', 'account']}>
+    <Tabs.Tab>
+    ```json filename="IDL" copy showLineNumbers {6,8-10, 12}
+    {
+      "version": "0.1.0",
+      "name": "hello_anchor",
+      "instructions": [
+          {
+            "name": "initialize",
+            "accounts": [
+                { "name": "newAccount", "isMut": true, "isSigner": true },
+                { "name": "signer", "isMut": true, "isSigner": true },
+                { "name": "systemProgram", "isMut": false, "isSigner": false }
+            ],
+            "args": [{ "name": "data", "type": "u64" }]
+          }
+      ],
+      "accounts": [
+          {
+            "name": "NewAccount",
+            "type": {
+                "kind": "struct",
+                "fields": [{ "name": "data", "type": "u64" }]
+            }
+          }
+      ]
+    }
+    ```
+
+    ```rust filename="lib.rs" copy showLineNumbers {8, 18, 20, 21}
+    use anchor_lang::prelude::*;
+
+    declare_id!("11111111111111111111111111111111");
+
+    #[program]
+    mod hello_anchor {
+        use super::*;
+        pub fn initialize(ctx: Context<Initialize>, data: u64) -> Result<()> {
+            ctx.accounts.new_account.data = data;
+            msg!("Changed data to: {}!", data);
+            Ok(())
+        }
+    }
+
+    #[derive(Accounts)]
+    pub struct Initialize<'info> {
+        #[account(init, payer = signer, space = 8 + 8)]
+        pub new_account: Account<'info, NewAccount>,
+        #[account(mut)]
+        pub signer: Signer<'info>,
+        pub system_program: Program<'info, System>,
+    }
+
+    #[account]
+    pub struct NewAccount {
+        data: u64,
+    }
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+    ```json filename="IDL" copy showLineNumbers {16-22}
+    {
+      "version": "0.1.0",
+      "name": "hello_anchor",
+      "instructions": [
+          {
+            "name": "initialize",
+            "accounts": [
+                { "name": "newAccount", "isMut": true, "isSigner": true },
+                { "name": "signer", "isMut": true, "isSigner": true },
+                { "name": "systemProgram", "isMut": false, "isSigner": false }
+            ],
+            "args": [{ "name": "data", "type": "u64" }]
+          }
+      ],
+      "accounts": [
+          {
+            "name": "NewAccount",
+            "type": {
+                "kind": "struct",
+                "fields": [{ "name": "data", "type": "u64" }]
+            }
+          }
+      ]
+    }
+    ```
+
+    ```rust filename="lib.rs" copy showLineNumbers {24-27}
+    use anchor_lang::prelude::*;
+
+    declare_id!("11111111111111111111111111111111");
+
+    #[program]
+    mod hello_anchor {
+        use super::*;
+        pub fn initialize(ctx: Context<Initialize>, data: u64) -> Result<()> {
+            ctx.accounts.new_account.data = data;
+            msg!("Changed data to: {}!", data);
+            Ok(())
+        }
+    }
+
+    #[derive(Accounts)]
+    pub struct Initialize<'info> {
+        #[account(init, payer = signer, space = 8 + 8)]
+        pub new_account: Account<'info, NewAccount>,
+        #[account(mut)]
+        pub signer: Signer<'info>,
+        pub system_program: Program<'info, System>,
+    }
+
+    #[account]
+    pub struct NewAccount {
+        data: u64,
+    }
+    ```
+    </Tabs.Tab>
+</Tabs>
+
+### Program
+```typescript
+ const program = anchor.workspace.HelloAnchor as Program<HelloAnchor>;
+ ```
+
+```typescript
+// Generate keypair for the new account
+const newAccountKp = new Keypair();
+
+// Send transaction
+const data = new BN(42);
+const txHash = await program.methods
+    .initialize(data)
+    .accounts({
+      newAccount: newAccountKp.publicKey,
+      signer: wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([newAccountKp])
+    .rpc();
+```
+
+```typescript /newAccount/2
+// Fetch the created account
+const newAccount = await program.account.newAccount.fetch(
+    newAccountKp.publicKey
+);
+```
