@@ -7,6 +7,9 @@ On Solana, the Token Program stores all the instruction logic for interacting wi
 
 ![Token Program](/solana/token/token-program.png)
 
+All tokens on Solana are effectively data accounts owned by the Token Program.
+Tokens (other than native SOL) are referred to as SPL Tokens, where SPL stands for [Solana Program Library](https://github.com/solana-labs/solana-program-library).
+
 ### Mint Account
 
 Tokens on Solana are uniquely identified by the address of a “Mint Account” owned by the Token Program.
@@ -41,10 +44,10 @@ A wallet can create multiple token accounts for the same type of token, but each
 
 ### Associated Token Account
 
-To simplify the process of locating a token account's address, we often use Associated Token Accounts.
-It's important to understand that an Associated Token Account isn't a different kind of token account; it's just a token account with a specific address.
+To simplify the process of locating a token account's address for a specific mint and owner, we often use Associated Token Accounts.
+It's important to understand that an Associated Token Account isn't a different type of token account; it's just a token account with a specific address.
 
-An Associated Token Account is a token account whose address is deterministically derived using a wallet's address and the mint account's address.
+An Associated Token Account is a token account whose address is deterministically derived using the owner's address and the mint account's address.
 
 ![Associated Token Account](/solana/token/associated-token-account.png)
 
@@ -60,5 +63,6 @@ This enables us to easily find the address of an account at a later time.
 
 ### Metadata Account
 
-Token metadata, such as a name and symbol are not directly supported by the Token Program. 
+Token metadata, such as name and image, are not directly supported by the Token Program. 
 Instead, the Metaplex Token Metadata Program is used to create an additional on-chain account called the Token Metadata Account to associate additional metadata to a Mint Account.
+You can refer to the [Metaplex documentation](https://docs.metaplex.com/programs/token-metadata/overview) to better understand the relationship between various accounts.

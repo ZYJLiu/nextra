@@ -27,9 +27,8 @@ const config: DocsThemeConfig = {
     labels: "feedback",
   },
   sidebar: {
-    defaultMenuCollapseLevel: Infinity,
+    defaultMenuCollapseLevel: 3,
     toggleButton: true,
-    // autoCollapse: true,
   },
   darkMode: true,
   toc: {

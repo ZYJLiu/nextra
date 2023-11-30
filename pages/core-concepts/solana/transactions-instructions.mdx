@@ -24,13 +24,13 @@ For simplicity, a transaction can be thought of a request to process one or mult
 ![Instructions](/solana/transaction-instruction/instructions.png)
 
 Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
-Transactions are processed "atomically", meaning that all instructions either complete successfully or, if one fails, the entire transaction is rejected.
+Transactions are also processed "atomically", meaning that all instructions in a transaction either process successfully or, if one fails, the entire transaction is rejected.
 
 ### Instruction
 
 An instruction is a request for a program to perform a specific operation and is the smallest contiguous unit of execution logic in a program. 
 
-Each instruction must include 3 pieces of information:
+Each instruction in a transaction must include 3 pieces of information:
 
 - **Program address**: Specifies the program being invoked
 - **Accounts**: Lists every account the instruction reads from or writes to, including other programs
@@ -48,7 +48,7 @@ This information is referred to as the `AccountMeta`.
 
 ![AccountMeta](/solana/transaction-instruction/accountmeta.png)
 
-By clearly identifying the accounts needed for an instruction and specifying whether each account is writable, transaction processing can be parallelized.
+By clearly identifying the accounts required by an instruction and specifying whether each account is writable, transaction processing can be parallelized.
 This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
 
 Note that the details for building specific program instructions are often abstracted away by client libraries and frameworks like Anchor.

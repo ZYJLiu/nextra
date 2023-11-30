@@ -25,7 +25,7 @@ The `AccountInfo` of an account stores the following information:
 - **lamports**: A numeric representation of the account's balance in lamports (smallest unit of SOL).
 - **owner**: Identifies the program authorized to modify the account data.
 
-To store data on-chain, an minimum amount of SOL must be transferred to an account proportional to the amount of data stored on the account.
+To store data on-chain, an certain amount of SOL must be transferred to an account. The amount is proportional to the size of data stored on the account.
 This concept is commonly referred to as “rent”.
 However, you can think of "rent" more like a "deposit" because the SOL allocated to an account can be fully recovered when the account is closed.
 
@@ -34,7 +34,7 @@ This program, and only this program, can modify the data stored on the account.
 
 <Callout>
   Only the program designated as the owner of an account can modify the data stored on the account.
-  With the exception of adding SOL to an account, which can be done by any account.
+  With the exception of adding SOL (increasing lamport balance), which can be done by any account.
 </Callout>
 
 ### System Program
@@ -63,8 +63,8 @@ At a high-level, the BPF Loader program is simply the program that owns all othe
 
 When a new program is deployed on Solana, technically two separate accounts are created.
 
-1. **Program Account**: The primary account representing the program and stores the address of the executable data account.
-2. **Program Executable Data Account**: Dedicated to storing the executable byte code of the program.
+- **Program Account**: The primary account representing the program and stores the address of the executable data account.
+- **Program Executable Data Account**: Dedicated to storing the executable byte code of the program.
 
 However, for simplicity, you can think of the "Program Account" as synonymous with the program itself.
 
