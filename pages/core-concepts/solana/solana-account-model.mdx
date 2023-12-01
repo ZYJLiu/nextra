@@ -10,11 +10,12 @@ Each account is identifiable by its unique address, represented as 32-bytes in t
 
 ![Account](/solana/account-model/account.png)
 
-This relationship between the account and its address can be thought of a key-value pair, where the address serves as the key to locate the corresponding on-chain data of the account.
+This relationship between the account and its address can be thought of a key-value pair, 
+where the address serves as the key to locate the corresponding on-chain data of the account.
 
 ### AccountInfo
 
-Every account on Solana has the following data structure known as the `AccountInfo`.
+Every account on Solana has the following structure known as the `AccountInfo`.
 
 ![AccountInfo](/solana/account-model/accountinfo.png)
 
@@ -25,7 +26,8 @@ The `AccountInfo` of an account stores the following information:
 - **lamports**: A numeric representation of the account's balance in lamports (smallest unit of SOL).
 - **owner**: Identifies the program authorized to modify the account data.
 
-To store data on-chain, an certain amount of SOL must be transferred to an account. The amount is proportional to the size of data stored on the account.
+To store data on-chain, an certain amount of SOL must be transferred to an account. 
+The amount is proportional to the size of data stored on the account.
 This concept is commonly referred to as “rent”.
 However, you can think of "rent" more like a "deposit" because the SOL allocated to an account can be fully recovered when the account is closed.
 
@@ -70,7 +72,12 @@ However, for simplicity, you can think of the "Program Account" as synonymous wi
 
 ![Program Account](/solana/account-model/program-account.png)
 
-Note that when we say "program," we're referring to the "Program Account". The address of the "Program Account" is commonly referred to as the “program ID”.
+Note that when we say "program," we're referring to the "Program Account". 
+The address of the "Program Account" is commonly referred to as the “program ID”.
+
+Here are links to the Metaplex Token Metadata 
+[Program Account](https://explorer.solana.com/address/metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s) and its corresponding 
+[Program Executable Data Account](https://explorer.solana.com/address/PwDiXFxQsGra4sFFTT8r1QWRMd4vfumiWC1jfWNfdYT).
 
 ### Data Account
 
