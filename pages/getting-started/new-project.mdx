@@ -20,7 +20,7 @@ This command creates a new Anchor project with the specified name.
 anchor init [project-name]
 ```
 
-Once the project is initialized, change your current directory to the newly created project folder:
+Once the project is initialized, change your current directory to the newly created project folder and open it in your code editor.
 
 ```shell filename="Terminal" copy
 cd [project-name]
@@ -30,6 +30,7 @@ cd [project-name]
 
 With your project set up, the next step is to build it.
 This process compiles your program and prepares it for deployment or testing.
+If this is your first time building the program, it will generate a `/target` folder with various subfolders related to your program.
 
 ```shell filename="Terminal" copy
 anchor build
@@ -37,10 +38,35 @@ anchor build
 
 ### Test the Program
 
-Finally, to verify that everything is working as expected, run the tests for your project:
+Finally, to verify that everything is working as expected, run the tests for your project.
 
 ```shell filename="Terminal" copy
 anchor test
+```
+
+By default, the `Anchor.toml` config file specify the cluster to `localnet`.
+When you run the `anchor test` command, it will automatically:
+1. Start a local Solana validator
+2. Build and deploy your program to the local cluster
+3. Run the tests in the `tests` folder
+4. Stop the local Solana validator
+
+Alternatively, you can manually start a local Solana validator and run tests against it.
+This is useful if you want to keep the validator running while you iterate on your program.
+It allows you to inspect accounts and transaction logs on the [Solana Explorer](https://explorer.solana.com/?cluster=custom).
+
+First, open a new terminal and start a local Solana validator.
+```shell filename="Terminal" copy
+solana-test-validator
+```
+With the validator running, return to the original terminal and deploy the program to the local cluster.
+```shell filename="Terminal" copy
+anchor deploy
+```
+Finally, run the tests against the local cluster.
+Use the `--skip-local-validator` flag to skip starting the local validator since it's already running.
+```shell filename="Terminal" copy
+anchor test --skip-local-validator
 ```
 
 </Steps>
@@ -85,24 +111,26 @@ Below is an overview of the key files in the workspace:
 
 ### Programs Folder
 
-The programs folder contains your project's Anchor programs. Each program is a subfolder containing a `Cargo.toml` file and a `src` folder with a `lib.rs` file.
+The programs folder contains your project's Anchor programs. 
+Each program is a subfolder containing a `Cargo.toml` file and a `src` folder with a `lib.rs` file.
 The `lib.rs` file contains the program's code, while the `Cargo.toml` file contains the program's dependencies.
 
 ### Tests Folder
 
-The tests folder contains test files for your project. Each test is a `.ts` file that contains a test suite for a program.
+The tests folder contains test files for your project.
+A default test file is created for you when you initialize your project.
 
 ### Target Folder
 
 The target folder contains the compiled output of your project. It includes the following subfolders:
 
 - **deploy**: Contains the keypair for your program.
-- **idl**: Contains the IDL for your program.
+- **idl**: Contains the JSON IDL for your program.
 - **types**: Contains the TypeScript version of your program's IDL.
 
 ### Anchor.toml File
 
-The [`Anchor.toml`]() file configures workspace-wide settings for your programs.
+The [`Anchor.toml`](/references/anchor-toml) file configures workspace-wide settings for your programs.
 
 ### .anchor Folder
 
@@ -110,4 +138,4 @@ Includes a `program-logs` file that contains the program's transaction logs from
 
 ### App Folder
 
-The app folder is an empty folder designated for your frontend code (if you're using a monorepo structure).
+The app folder is an empty folder that can be optionally used for your frontend code (if you're using a monorepo structure).
