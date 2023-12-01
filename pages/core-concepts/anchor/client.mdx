@@ -8,7 +8,9 @@ To use the client library, you first need to set up an instance of the `Program`
 ### Anchor IDL
 
 When an Anchor program is built, Anchor generates an interface description language (IDL) file representing the structure of the program.
-This IDL file provides a standardized format for building transactions that invoke program instructions and fetching program accounts. 
+This IDL file provides a standardized format for building program instructions and fetching program accounts. 
+
+Below is an example of how an IDL file relates to the program and client code.
 
 <Tabs items={['instruction', 'account']}>
     <Tabs.Tab>
@@ -246,7 +248,7 @@ const program = anchor.workspace.HelloAnchor as Program<HelloAnchor>;
 
 When integrating with a frontend using the wallet adapter, you'll need to manually set up the `AnchorProvider` and `Program`.
 
-```typescript showLineNumbers
+```typescript showLineNumbers {13-14, 17}
 import {
   Program,
   Idl,
@@ -269,7 +271,7 @@ const program = new Program<HelloAnchor>(IDL, programId);
 Alternatively, you can create an instance of the `Program` using only the IDL and the `Connection` to a Solana cluster.
 This means there is no default `Wallet`, but allows you to use the `Program` to fetch accounts before a wallet is connected.
 
-```typescript showLineNumbers
+```typescript showLineNumbers {8-10}
 import { Program } from "@coral-xyz/anchor";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { IDL, HelloAnchor } from "./idl";
@@ -300,7 +302,7 @@ The basic format looks like this:
     ```
     </Tabs.Tab>
     <Tabs.Tab>
-    Specific an instruction from the program IDL, passing in any instruction arguments as comma-separated values
+    Specific an instruction from the program IDL, passing in any instruction data as comma-separated values
 
     ```typescript showLineNumbers /instructionName/ /instructionData1/ /instructionData2/ {2}
     await program.methods
@@ -311,7 +313,7 @@ The basic format looks like this:
     ```
     </Tabs.Tab>
     <Tabs.Tab>
-    `.accounts` - pass in an object with each account required by the instruction
+    `.accounts` - pass in an object with the address of each account required by the instruction
     ```typescript showLineNumbers /accounts/ {3}
     await program.methods
       .instructionName(instructionData)
@@ -321,7 +323,7 @@ The basic format looks like this:
     ```
     </Tabs.Tab>
     <Tabs.Tab>
-    `.signers` - optionally pass in an array of keypairs required as signers by the instruction
+    `.signers` - optionally pass in an array of keypairs required as additional signers by the instruction
     ```typescript showLineNumbers /signers/ {4}
     await program.methods
       .instructionName(instructionData)
@@ -332,6 +334,8 @@ The basic format looks like this:
     </Tabs.Tab>
 </Tabs>
 
+
+Below are examples of how to invoke an instruction using the methods builder.
 
 <Tabs items={['.rpc', '.transaction', '.instruction']}>
     <Tabs.Tab>
@@ -409,7 +413,7 @@ The basic format looks like this:
 ### Fetch Program Accounts
 
 The `Program` also allows you to easily fetch and filter program accounts. 
-Simply call `account` on `program` and then specify the name of the account type as reflected on the IDL. 
+Simply use `program.account` and then specify the name of the account type on the IDL. 
 Anchor then deserializes and returns all accounts as specified.
 
 <Tabs items={['all', 'memcmp', 'fetch', 'fetchMultiple']}>
@@ -421,16 +425,17 @@ Anchor then deserializes and returns all accounts as specified.
     ```
     </Tabs.Tab>
     <Tabs.Tab>
-    Use `memcmp` to filter for accounts that match a specific value at a specific offset
+    Use `memcmp` to filter for accounts that match a specific value at a specific offset.
+    When calculating the offset, remember that the first 8 bytes are reserved for the account discriminator.
     
     ```typescript showLineNumbers
     const accounts = await program.account.newAccount.all([
-    {
-        memcmp: {
-          offset: 8,
-          bytes: "",
-        },
-    },
+      {
+          memcmp: {
+            offset: 8,
+            bytes: "",
+          },
+      },
     ]);
     ```
     </Tabs.Tab>

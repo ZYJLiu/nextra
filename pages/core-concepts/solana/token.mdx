@@ -2,8 +2,8 @@
 
 ### Token Program
 
-Next, let's go over the basics of the Token Program to better understand how tokens are represented on Solana.
-On Solana, the Token Program stores all the instruction logic for interacting with tokens on the network.
+Next, let's go over the basics of the [Token Program](https://github.com/solana-labs/solana-program-library/tree/master/token/program) to better understand how tokens are represented on Solana.
+On Solana, the Token Program stores all the instruction logic for interacting with tokens on the network (both fungible and non-fungible).
 
 ![Token Program](/solana/token/token-program.png)
 
@@ -21,6 +21,27 @@ This account is effectively a global counter for a specific token, and stores da
 - Freeze authority: The account authorized to freeze tokens from being transferred from "token accounts"
 
 ![Mint Account](/solana/token/mint-account.png)
+
+Here is a Solana Explorer link to the USDC [Mint Account](https://explorer.solana.com/address/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)
+which stores this [data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L18-L32).
+
+```rust
+pub struct Mint {
+    /// Optional authority used to mint new tokens. The mint authority may only
+    /// be provided during mint creation. If no mint authority is present
+    /// then the mint has a fixed supply and no further tokens may be
+    /// minted.
+    pub mint_authority: COption<Pubkey>,
+    /// Total supply of tokens.
+    pub supply: u64,
+    /// Number of base 10 digits to the right of the decimal place.
+    pub decimals: u8,
+    /// Is `true` if this structure has been initialized
+    pub is_initialized: bool,
+    /// Optional authority to freeze token accounts.
+    pub freeze_authority: COption<Pubkey>,
+}
+```
 
 ### Token Account
 
@@ -42,6 +63,35 @@ A wallet can create multiple token accounts for the same type of token, but each
 
 ![Token Account 2](/solana/token/token-account2.png)
 
+Here a Solana Explorer link to a USDC [Token Account](https://explorer.solana.com/address/3emsAVdmGKERbHjmGfQ6oZ1e35dkf5iYcS6U4CPKFVaa)
+with this [owner](https://explorer.solana.com/address/7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE)
+which stores this [data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L89-L110).
+
+```rust
+pub struct Account {
+    /// The mint associated with this account
+    pub mint: Pubkey,
+    /// The owner of this account.
+    pub owner: Pubkey,
+    /// The amount of tokens this account holds.
+    pub amount: u64,
+    /// If `delegate` is `Some` then `delegated_amount` represents
+    /// the amount authorized by the delegate
+    pub delegate: COption<Pubkey>,
+    /// The account's state
+    pub state: AccountState,
+    /// If is_native.is_some, this is a native token, and the value logs the
+    /// rent-exempt reserve. An Account is required to be rent-exempt, so
+    /// the value is used by the Processor to ensure that wrapped SOL
+    /// accounts do not drop below this threshold.
+    pub is_native: COption<u64>,
+    /// The amount delegated
+    pub delegated_amount: u64,
+    /// Optional authority to close the account.
+    pub close_authority: COption<Pubkey>,
+}
+```
+
 ### Associated Token Account
 
 To simplify the process of locating a token account's address for a specific mint and owner, we often use Associated Token Accounts.
@@ -51,18 +101,41 @@ An Associated Token Account is a token account whose address is deterministicall
 
 ![Associated Token Account](/solana/token/associated-token-account.png)
 
-When transferring tokens between wallets, the tokens are generally sent to the recipient wallet's Associated Token Account.
-
-For example, if two wallets want to hold units of the same type of token, each wallet needs its own token account for the specific mint account.
-
-![Associated Token Account 2](/solana/token/associated-token-account2.png)
-
 This introduces a key concept in Solana development: Program Derived Address (PDA).
 Conceptually, a PDA provide a deterministic way to generate an address using some predefined inputs.
 This enables us to easily find the address of an account at a later time.
 
+Here is an [Solana Playground](https://beta.solpg.io/656a2dd0fb53fa325bfd0c41) example that derives the USDC Associated Token Account address an owner.
+It will always generate the [same address](https://explorer.solana.com/address/4kokFKCFMxpCpG41yLYkLEqXW8g1WPfCt2NC9KGivY6N) for the same mint and owner.
+
+```typescript showLineNumbers
+const associatedTokenAccountAddress = getAssociatedTokenAddressSync(
+  USDC_MINT_ADDRESS,
+  OWNER_ADDRESS
+);
+```
+
+Specifically, the address for an Associated Token Account is derived using the following inputs.
+Here is an [Solana Playground](https://beta.solpg.io/656a31d0fb53fa325bfd0c42) example that generates the same address as the previous example.
+
+```typescript showLineNumbers
+const [PDA, bump] = PublicKey.findProgramAddressSync(
+  [
+    OWNER_ADDRESS.toBuffer(),
+    TOKEN_PROGRAM_ID.toBuffer(),
+    USDC_MINT_ADDRESS.toBuffer(),
+  ],
+  ASSOCIATED_TOKEN_PROGRAM_ID
+);
+```
+
+If two wallets want to hold units of the same type of token, each wallet needs its own token account for the specific mint account.
+You can think of the associated token account as the "default" token account for a specific mint and owner.
+
+![Associated Token Account 2](/solana/token/associated-token-account2.png)
+
 ### Metadata Account
 
 Token metadata, such as name and image, are not directly supported by the Token Program. 
-Instead, the Metaplex Token Metadata Program is used to create an additional on-chain account called the Token Metadata Account to associate additional metadata to a Mint Account.
+Instead, the [Metaplex Token Metadata Program](https://github.com/metaplex-foundation/mpl-token-metadata) is used to create an additional on-chain account called the "Token Metadata Account" to associate additional metadata to a Mint Account.
 You can refer to the [Metaplex documentation](https://docs.metaplex.com/programs/token-metadata/overview) to better understand the relationship between various accounts.

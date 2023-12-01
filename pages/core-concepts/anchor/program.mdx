@@ -2,8 +2,7 @@ import { Tabs } from 'nextra/components'
 
 ## Anchor Program
 
-Anchor programs clearly separate account validation (security checks) from instruction logic so you can more easily reason about your code. 
-Additionally, Anchor uses Rust macros to abstract away a significant amount of boilerplate associated with writing a Solana program.
+Anchor programs uses Rust macros to abstract away a significant amount of boilerplate associated with writing a Solana program.
 The main macros include:
 
 - `declare_id` - specifies the program’s on-chain address
@@ -57,7 +56,7 @@ use anchor_lang::prelude::*;
 declare_id!("11111111111111111111111111111111");
 ```
 
-Note that you can automatically update the value in `declare_id` with the generated program ID using the following command:
+You can update the value in `declare_id` with the generated program ID using the following command:
 
 ```shell filename="Terminal" copy
 anchor keys sync
@@ -69,7 +68,7 @@ The `#[program]` macro specifies the module containing all of your program's ins
 Each public function in the module represents a separate instruction for the program.
 
 The first parameter of each function is always a `Context` type. 
-Optional parameters after the `Context` specify additional instruction data required to be provided by the client.
+Parameters after the `Context` specify additional instruction data required to be provided by the client.
 
 ```rust filename="lib.rs" copy showLineNumbers {5, 8-12}
 use anchor_lang::prelude::*;
@@ -158,10 +157,10 @@ pub struct Initialize<'info> {
 }
 ```
 Given that the accounts are provided by the client, it's crucial to implement security checks to verify the accounts.
-In an Anchor program, account validation is achieved through account constraints and specifying the account type.
+With Anchor, account validation is done using account constraints and specifying the account type.
 
 - `Account Constraints`: Constraints define additional conditions that an account must satisfy to be considered valid for the instruction.
-Constraints are applied using the `#[account(..)]` attribute, which is placed above a struct field.
+Constraints are applied using the `#[account(..)]` attribute, which is placed above an account field in the `Accounts` struct.
 - `Account Types`: Anchor account types help ensure the account provided by the client matches the type expected by the program.
 
 You can find examples for the various [constraints](/references/account-types) and [account types](/references/account-constraints) under the references section.
@@ -192,7 +191,7 @@ You can find examples for the various [constraints](/references/account-types) a
     </Tabs.Tab>
 </Tabs>
 
-These accounts can be accessed within an instruction through the `Context`, using the `ctx.accounts` notation.
+In accounts in the `Accounts` struct can be accessed within an instruction through the `Context`, using the `ctx.accounts` notation.
 
 ```rust filename="lib.rs" copy showLineNumbers  /ctx.accounts.new_account/ /new_account/ /Initialize/ {15-22}
 use anchor_lang::prelude::*;
@@ -226,14 +225,14 @@ pub struct NewAccount {
 
 When an instruction is invoked, the program performs the following actions:
 
-- Checks that the accounts passed into the instruction match the account types in the struct specified in the `Context` 
+- Checks that the accounts passed into the instruction match the account types in the `Accounts` struct specified in the `Context` 
 - Checks the accounts against any additional constraints specified
 
 If any checks fail, then the instruction fails and throws an error before it reaches the main logic of the function.
 
 ### #[account]
 
-The `#[account]` macro is applied to structs to define the structure of a custom data account type for the program.
+The `#[account]` macro is applied to structs defining the structure of a custom data account type for the program.
 Each field in the struct represents a field that will be stored in the account data.
 
 ```rust copy showLineNumbers {3}
@@ -244,10 +243,10 @@ pub struct NewAccount {
 ```
 
 This macro implements various traits [detailed here](https://docs.rs/anchor-lang/latest/anchor_lang/attr.account.html). 
-In simpler terms, the `#[account]` macro ensures that:
+The `#[account]` macro ensures that:
 - When an account is created, its owner is set to the program defined in `declare_id`.
 - An 8 byte discriminator, based on the account type, is added to the account data upon initialization.
-- Account data for a specific account type is automatically serialized and deserialized.
+- Account data for the specific account type is automatically serialized and deserialized.
 
 ```rust filename="lib.rs" copy showLineNumbers /data/2,6 /NewAccount/ {24-27}
 use anchor_lang::prelude::*;
