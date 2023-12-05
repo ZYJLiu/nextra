@@ -2,28 +2,38 @@
 
 ### Token Program
 
-Next, let's go over the basics of the [Token Program](https://github.com/solana-labs/solana-program-library/tree/master/token/program) to better understand how tokens are represented on Solana.
-On Solana, the Token Program stores all the instruction logic for interacting with tokens on the network (both fungible and non-fungible).
+Next, let's go over the basics of the
+[Token Program](https://github.com/solana-labs/solana-program-library/tree/master/token/program)
+to better understand how tokens are represented on Solana. On Solana, the Token
+Program stores all the instruction logic for interacting with tokens on the
+network (both fungible and non-fungible).
 
 ![Token Program](/solana/token/token-program.png)
 
 All tokens on Solana are effectively data accounts owned by the Token Program.
-Tokens (other than native SOL) are referred to as SPL Tokens, where SPL stands for [Solana Program Library](https://github.com/solana-labs/solana-program-library).
+Tokens (other than native SOL) are referred to as SPL Tokens, where SPL stands
+for
+[Solana Program Library](https://github.com/solana-labs/solana-program-library).
 
 ### Mint Account
 
-Tokens on Solana are uniquely identified by the address of a “Mint Account” owned by the Token Program.
-This account is effectively a global counter for a specific token, and stores data such as:
+Tokens on Solana are uniquely identified by the address of a “Mint Account”
+owned by the Token Program. This account is effectively a global counter for a
+specific token, and stores data such as:
 
 - Supply: Total supply of the token
 - Decimals: Decimal precision of the token
-- Mint authority: The account authorized to create new units of the token, and thus increasing the supply
-- Freeze authority: The account authorized to freeze tokens from being transferred from "token accounts"
+- Mint authority: The account authorized to create new units of the token, and
+  thus increasing the supply
+- Freeze authority: The account authorized to freeze tokens from being
+  transferred from "token accounts"
 
 ![Mint Account](/solana/token/mint-account.png)
 
-Here is a Solana Explorer link to the USDC [Mint Account](https://explorer.solana.com/address/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)
-which stores this [data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L18-L32).
+Here is a Solana Explorer link to the USDC
+[Mint Account](https://explorer.solana.com/address/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)
+which stores this
+[data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L18-L32).
 
 ```rust
 pub struct Mint {
@@ -45,8 +55,8 @@ pub struct Mint {
 
 ### Token Account
 
-To hold units of a specific token, another type of data account owned by the Token Program must be created.
-This account is referred to as a "Token Account".
+To hold units of a specific token, another type of data account owned by the
+Token Program must be created. This account is referred to as a "Token Account".
 
 The Token Account stores data including the following:
 
@@ -56,16 +66,25 @@ The Token Account stores data including the following:
 
 ![Token Account](/solana/token/token-account.png)
 
-Note that each Token Account's data includes an “owner" field used to identify who has authority over that specific Token Account. This is separate from the program owner specified in the AccountInfo, which is the Token Program for all Token Accounts.
+Note that each Token Account's data includes an “owner" field used to identify
+who has authority over that specific Token Account. This is separate from the
+program owner specified in the AccountInfo, which is the Token Program for all
+Token Accounts.
 
-For a wallet to hold units of a certain token, it needs to create a token account for a specific type of token (mint) that designates the wallet as the owner of the token account.
-A wallet can create multiple token accounts for the same type of token, but each token account can only be owned by one wallet and hold units of one type of token.
+For a wallet to hold units of a certain token, it needs to create a token
+account for a specific type of token (mint) that designates the wallet as the
+owner of the token account. A wallet can create multiple token accounts for the
+same type of token, but each token account can only be owned by one wallet and
+hold units of one type of token.
 
 ![Token Account 2](/solana/token/token-account2.png)
 
-Here a Solana Explorer link to a USDC [Token Account](https://explorer.solana.com/address/3emsAVdmGKERbHjmGfQ6oZ1e35dkf5iYcS6U4CPKFVaa)
-with this [owner](https://explorer.solana.com/address/7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE)
-which stores this [data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L89-L110).
+Here a Solana Explorer link to a USDC
+[Token Account](https://explorer.solana.com/address/3emsAVdmGKERbHjmGfQ6oZ1e35dkf5iYcS6U4CPKFVaa)
+with this
+[owner](https://explorer.solana.com/address/7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE)
+which stores this
+[data](https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/state.rs#L89-L110).
 
 ```rust
 pub struct Account {
@@ -94,29 +113,39 @@ pub struct Account {
 
 ### Associated Token Account
 
-To simplify the process of locating a token account's address for a specific mint and owner, we often use Associated Token Accounts.
-It's important to understand that an Associated Token Account isn't a different type of token account; it's just a token account with a specific address.
+To simplify the process of locating a token account's address for a specific
+mint and owner, we often use Associated Token Accounts. It's important to
+understand that an Associated Token Account isn't a different type of token
+account; it's just a token account with a specific address.
 
-An Associated Token Account is a token account whose address is deterministically derived using the owner's address and the mint account's address.
+An Associated Token Account is a token account whose address is
+deterministically derived using the owner's address and the mint account's
+address.
 
 ![Associated Token Account](/solana/token/associated-token-account.png)
 
-This introduces a key concept in Solana development: Program Derived Address (PDA).
-Conceptually, a PDA provide a deterministic way to generate an address using some predefined inputs.
-This enables us to easily find the address of an account at a later time.
+This introduces a key concept in Solana development: Program Derived Address
+(PDA). Conceptually, a PDA provide a deterministic way to generate an address
+using some predefined inputs. This enables us to easily find the address of an
+account at a later time.
 
-Here is an [Solana Playground](https://beta.solpg.io/656a2dd0fb53fa325bfd0c41) example that derives the USDC Associated Token Account address an owner.
-It will always generate the [same address](https://explorer.solana.com/address/4kokFKCFMxpCpG41yLYkLEqXW8g1WPfCt2NC9KGivY6N) for the same mint and owner.
+Here is an [Solana Playground](https://beta.solpg.io/656a2dd0fb53fa325bfd0c41)
+example that derives the USDC Associated Token Account address an owner. It will
+always generate the
+[same address](https://explorer.solana.com/address/4kokFKCFMxpCpG41yLYkLEqXW8g1WPfCt2NC9KGivY6N)
+for the same mint and owner.
 
 ```typescript showLineNumbers
 const associatedTokenAccountAddress = getAssociatedTokenAddressSync(
   USDC_MINT_ADDRESS,
-  OWNER_ADDRESS
+  OWNER_ADDRESS,
 );
 ```
 
-Specifically, the address for an Associated Token Account is derived using the following inputs.
-Here is an [Solana Playground](https://beta.solpg.io/656a31d0fb53fa325bfd0c42) example that generates the same address as the previous example.
+Specifically, the address for an Associated Token Account is derived using the
+following inputs. Here is an
+[Solana Playground](https://beta.solpg.io/656a31d0fb53fa325bfd0c42) example that
+generates the same address as the previous example.
 
 ```typescript showLineNumbers
 const [PDA, bump] = PublicKey.findProgramAddressSync(
@@ -125,17 +154,24 @@ const [PDA, bump] = PublicKey.findProgramAddressSync(
     TOKEN_PROGRAM_ID.toBuffer(),
     USDC_MINT_ADDRESS.toBuffer(),
   ],
-  ASSOCIATED_TOKEN_PROGRAM_ID
+  ASSOCIATED_TOKEN_PROGRAM_ID,
 );
 ```
 
-If two wallets want to hold units of the same type of token, each wallet needs its own token account for the specific mint account.
-You can think of the associated token account as the "default" token account for a specific mint and owner.
+If two wallets want to hold units of the same type of token, each wallet needs
+its own token account for the specific mint account. You can think of the
+associated token account as the "default" token account for a specific mint and
+owner.
 
 ![Associated Token Account 2](/solana/token/associated-token-account2.png)
 
 ### Metadata Account
 
-Token metadata, such as name and image, are not directly supported by the Token Program. 
-Instead, the [Metaplex Token Metadata Program](https://github.com/metaplex-foundation/mpl-token-metadata) is used to create an additional on-chain account called the "Token Metadata Account" to associate additional metadata to a Mint Account.
-You can refer to the [Metaplex documentation](https://docs.metaplex.com/programs/token-metadata/overview) to better understand the relationship between various accounts.
+Token metadata, such as name and image, are not directly supported by the Token
+Program. Instead, the
+[Metaplex Token Metadata Program](https://github.com/metaplex-foundation/mpl-token-metadata)
+is used to create an additional on-chain account called the "Token Metadata
+Account" to associate additional metadata to a Mint Account. You can refer to
+the
+[Metaplex documentation](https://docs.metaplex.com/programs/token-metadata/overview)
+to better understand the relationship between various accounts.

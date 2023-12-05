@@ -1,10 +1,10 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 ## Transactions and Instructions
 
 ### Transaction
 
-On Solana, transactions are sent to interact with the network from the client. 
+On Solana, transactions are sent to interact with the network from the client.
 Let’s begin by expanding on the details that make up a transaction:
 
 1. **Message:** At its core, a transaction has a message. This message includes:
@@ -16,53 +16,68 @@ Let’s begin by expanding on the details that make up a transaction:
 ![Transaction](/solana/transaction-instruction/transaction.png)
 
 <Callout>
- By default, the first signer on the transaction is set as the fee payer unless otherwise specified.
+  By default, the first signer on the transaction is set as the fee payer unless
+  otherwise specified.
 </Callout>
 
-For simplicity, a transaction can be thought of a request to process one or multiple instructions.
+For simplicity, a transaction can be thought of a request to process one or
+multiple instructions.
 
 ![Instructions](/solana/transaction-instruction/instructions.png)
 
-Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
-Transactions are also processed "atomically", meaning that all instructions in a transaction either process successfully or, if one fails, the entire transaction is rejected.
+Instructions in a transaction are processed sequentially, in the order they are
+added to a transaction. Transactions are also processed "atomically", meaning
+that all instructions in a transaction either process successfully or, if one
+fails, the entire transaction is rejected.
 
 ### Instruction
 
-An instruction is a request for a program to perform a specific operation and is the smallest contiguous unit of execution logic in a program. 
+An instruction is a request for a program to perform a specific operation and is
+the smallest contiguous unit of execution logic in a program.
 
 Each instruction in a transaction must include 3 pieces of information:
 
 - **Program address**: Specifies the program being invoked
-- **Accounts**: Lists every account the instruction reads from or writes to, including other programs
-- **Instruction Data**: Specifies which instruction on the program to invoke, plus any additional data required by the instruction
+- **Accounts**: Lists every account the instruction reads from or writes to,
+  including other programs
+- **Instruction Data**: Specifies which instruction on the program to invoke,
+  plus any additional data required by the instruction
 
 ![Instruction](/solana/transaction-instruction/instruction.png)
 
-For every account required by an instruction, the following information must be specified:
+For every account required by an instruction, the following information must be
+specified:
 
 - **Account address**: The on-chain address of an account
-- **is_signer**: Specify if the account is required as a signer on the transaction
+- **is_signer**: Specify if the account is required as a signer on the
+  transaction
 - **is_writable**: Specify if the account data will be modified
 
 This information is referred to as the `AccountMeta`.
 
 ![AccountMeta](/solana/transaction-instruction/accountmeta.png)
 
-By clearly identifying the accounts required by an instruction and specifying whether each account is writable, transaction processing can be parallelized.
-This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
+By clearly identifying the accounts required by an instruction and specifying
+whether each account is writable, transaction processing can be parallelized.
+This means that if two transactions do not include any accounts which write to
+the same state, then the transactions can be executed at the same time.
 
 ### SOL Transfer Example
 
-Below is a diagram representing a transaction with a single instruction to transfer SOL from a sender to a receiver.
+Below is a diagram representing a transaction with a single instruction to
+transfer SOL from a sender to a receiver.
 
 ![SOL Transfer](/solana/transaction-instruction/sol-transfer.png)
 
-Once the transaction is sent, the System Program is invoked to process the transfer instruction.
-The System Program then updates the lamport balances of both the sender and receiver accounts accordingly.
+Once the transaction is sent, the System Program is invoked to process the
+transfer instruction. The System Program then updates the lamport balances of
+both the sender and receiver accounts accordingly.
 
 ![SOL Transfer Diagram](/solana/transaction-instruction/sol-transfer2.png)
 
-Here is [Solana Playground](https://beta.solpg.io/656a0ea7fb53fa325bfd0c3e) example of how to build a SOL transfer instruction using the `SystemProgram.transfer` method:
+Here is [Solana Playground](https://beta.solpg.io/656a0ea7fb53fa325bfd0c3e)
+example of how to build a SOL transfer instruction using the
+`SystemProgram.transfer` method:
 
 ```typescript filename="SOL Transfer" showLineNumbers {5-9}
 // Define the amount to transfer
@@ -79,7 +94,8 @@ const transferInstruction = SystemProgram.transfer({
 const transaction = new Transaction().add(transferInstruction);
 ```
 
-Here is a [Solana Playground](https://beta.solpg.io/656a102efb53fa325bfd0c3f) example of how to manually built the same SOL transfer instruction:
+Here is a [Solana Playground](https://beta.solpg.io/656a102efb53fa325bfd0c3f)
+example of how to manually built the same SOL transfer instruction:
 
 ```typescript filename="SOL Transfer" showLineNumbers /instructionData/1,4 {15-22}
 // Define the amount to transfer
@@ -109,8 +125,11 @@ const transferInstruction = new TransactionInstruction({
 const transaction = new Transaction().add(transferInstruction);
 ```
 
-Under the hood, the `SystemProgram.transfer` method is functionally equivalent to the more verbose example above.
-It is simply abstracting away the details of creating the instruction data buffer and explicitly specifying the `AccountMeta` for each account required by the instruction.
+Under the hood, the `SystemProgram.transfer` method is functionally equivalent
+to the more verbose example above. It is simply abstracting away the details of
+creating the instruction data buffer and explicitly specifying the `AccountMeta`
+for each account required by the instruction.
 
-Note that the details for building specific program instructions are often abstracted away by client libraries and frameworks like Anchor.
-However, it is helpful to understand the underlying structure of transactions and instructions.
+Note that the details for building specific program instructions are often
+abstracted away by client libraries and frameworks like Anchor. However, it is
+helpful to understand the underlying structure of transactions and instructions.

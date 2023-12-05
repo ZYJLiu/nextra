@@ -8,18 +8,18 @@
   "updates": "Version Updates",
   "contribution-guide": "Contribution Guide",
 
-  "-- Placeholder": {
-    "type": "separator",
-    "title": "Placeholder"
-  },
-
-  "placeholder": "Revise",
-
-  "-- Random": {
+  "-- Ignore Below": {
     "type": "separator",
     "title": "Ignore Below"
   },
-  "misc": "Misc",
+
+  "placeholder": {
+    "title": "Revise"
+  },
+
+  "misc": {
+    "title": "Misc"
+  },
 
   "about": {
     "title": "About",

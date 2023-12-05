@@ -1,17 +1,21 @@
-import { Tabs } from 'nextra/components'
+import { Tabs } from "nextra/components";
 
 ## Anchor Program
 
-Anchor programs uses Rust macros to abstract away a significant amount of boilerplate associated with writing a Solana program.
-The main macros include:
+Anchor uses Rust macros to reduce boilerplate code and simplify the application
+of common security checks associated with writing Solana programs. The main
+macros include:
 
-- `declare_id` - specifies the program’s on-chain address
-- `#[program]` - applied to the module containing the program’s instruction logic
-- `#[derive(Accounts)]` - applied to structs representing the list of accounts required for an instruction
-- `#[account]` - applied to structs defining custom account types for the program
+- `declare_id`: Specifies the program's on-chain address
+- `#[program]`: Specifies the module containing the program’s instruction logic
+- `#[derive(Accounts)]`: Applied to structs to indicate a list of accounts
+  required for an instruction
+- `#[account]`: Applied to structs to create custom account types specific to
+  the program
 
-Below is a simple Anchor program with a single instruction that creates a new account.
-We'll walk through it to explain the basic structure of an Anchor program.
+Below is a simple Anchor program with a single instruction that creates a new
+account. We'll walk through it to explain the basic structure of an Anchor
+program.
 
 ```rust filename="lib.rs" copy showLineNumbers
 use anchor_lang::prelude::*;
@@ -45,10 +49,11 @@ pub struct NewAccount {
 
 ### declare_id!()
 
-The `declare_id` macro is used to specify the on-chain address of the program (i.e. the program ID). 
-When you build an Anchor program for the first time, the framework will generate a new keypair. 
-This becomes the default keypair used to deploy the program unless specified otherwise. 
-The corresponding public key should be used as the program ID specified in the `declare_id` macro.
+The `declare_id` macro is used to specify the on-chain address of the program
+(i.e. the program ID). When you build an Anchor program for the first time, the
+framework will generate a new keypair. This becomes the default keypair used to
+deploy the program unless specified otherwise. The public key from this keypair
+should be used as the program ID in the `declare_id` macro.
 
 ```rust filename="lib.rs" copy showLineNumbers {3}
 use anchor_lang::prelude::*;
@@ -56,7 +61,8 @@ use anchor_lang::prelude::*;
 declare_id!("11111111111111111111111111111111");
 ```
 
-You can update the value in `declare_id` with the generated program ID using the following command:
+You can update the value in `declare_id` with the generated program ID using the
+following command:
 
 ```shell filename="Terminal" copy
 anchor keys sync
@@ -64,11 +70,13 @@ anchor keys sync
 
 ### #[program]
 
-The `#[program]` macro specifies the module containing all of your program's instructions. 
-Each public function in the module represents a separate instruction for the program.
+The `#[program]` macro specifies the module containing all of your program's
+instructions. Each public function in the module represents a separate
+instruction for the program.
 
-The first parameter of each function is always a `Context` type. 
-Parameters after the `Context` specify additional instruction data required to be provided by the client.
+In every function, the initial parameter is always of the `Context` type.
+Subsequent parameters, which are optional, define instruction data required by
+the instruction.
 
 ```rust filename="lib.rs" copy showLineNumbers {5, 8-12}
 use anchor_lang::prelude::*;
@@ -100,7 +108,8 @@ pub struct NewAccount {
 }
 ```
 
-The `Context` type provides the instruction with access to the following information:
+The `Context` type provides the instruction with access to the following
+information:
 
 ```rust
 pub struct Context<'a, 'b, 'c, 'info, T> {
@@ -118,19 +127,23 @@ pub struct Context<'a, 'b, 'c, 'info, T> {
 }
 ```
 
-`Context` is a generic type where `T` defines the list of accounts an instruction requires. 
-When specifying the instruction `Context`, the type of `T` is a struct that implements the `Accounts` trait (e.g. `Context<Initialize>`). 
+`Context` is a generic type where `T` represents the set of accounts required by
+an instruction. When defining the instruction's `Context`, the `T` type is a
+struct that implements to the `Accounts` trait (e.g. `Context<Initialize>`).
 
-Through this context argument the instruction can then access:
+This context parameter allows the instruction to access:
 
-- The accounts passed into the instruction (`ctx.accounts`)
-- The program ID (`ctx.program_id`) of the executing program
-- The remaining accounts (`ctx.remaining_accounts`). The `remaining_accounts` is a vector that contains all accounts that were passed into the instruction but are not declared in the `Accounts` struct.
-- The bumps for any PDA accounts in the `Accounts` struct (`ctx.bumps`)
+- `ctx.accounts`: The instruction's accounts
+- `ctx.program_id`: The executing program's ID
+- `ctx.remaining_accounts`: All remaining accounts provided to the instruction
+  but not specified in the `Accounts` struct
+- `ctx.bumps`: Bump seeds for any Program Derived Address (PDA) accounts
+  specified in the `Accounts` struct
 
 ### #[derive(Accounts)]
 
-A struct annotated with the `#[derive(Accounts)]` macro represents a list of accounts required by an instruction.
+The `#[derive(Accounts)]` macro is used to annotate a struct which specifies a
+set of accounts required for a particular instruction.
 
 ```rust copy showLineNumbers /Accounts/ {1}
 #[derive(Accounts)]
@@ -143,8 +156,9 @@ pub struct Initialize<'info> {
 }
 ```
 
-Each field in the struct represents an account that must be provided by the client.
-The naming of each field is arbitrary, but it is recommended to use a descriptive name that indicates the purpose of the account.
+Each field in the struct represents an account that must be provided by the
+client. The naming of each field is arbitrary, but it is recommended to use a
+descriptive name that indicates the purpose of the account.
 
 ```rust copy showLineNumbers /signer/2 /new_account/ /system_program/
 #[derive(Accounts)]
@@ -156,14 +170,22 @@ pub struct Initialize<'info> {
     pub system_program: Program<'info, System>,
 }
 ```
-Given that the accounts are provided by the client, it's crucial to implement security checks to verify the accounts.
-With Anchor, account validation is done using account constraints and specifying the account type.
 
-- `Account Constraints`: Constraints define additional conditions that an account must satisfy to be considered valid for the instruction.
-Constraints are applied using the `#[account(..)]` attribute, which is placed above an account field in the `Accounts` struct.
-- `Account Types`: Anchor account types help ensure the account provided by the client matches the type expected by the program.
+When building Solana programs, it's essential to validate the accounts provided
+by the client for security reasons. This validation is achieved in Anchor
+through account constraints and specifying appropriate account types:
 
-You can find examples for the various [constraints](/references/account-types) and [account types](/references/account-constraints) under the references section.
+- **Account Constraints**: Constraints define additional conditions that an
+  account must satisfy to be considered valid for the instruction. Constraints
+  are applied using the `#[account(..)]` attribute, which is placed above an
+  account field in the `Accounts` struct.
+- **Account Types**: Anchor provides various account types to help ensure that
+  the account provided by the client matches with what the program expects.
+
+For more detailed examples, refer to the
+[constraints](/references/account-types) and
+[account types](/references/account-constraints) sections in the documentation.
+
 <Tabs items={['constraints', 'account types']}>
     <Tabs.Tab>
     ```rust copy showLineNumbers {3, 5}
@@ -191,7 +213,8 @@ You can find examples for the various [constraints](/references/account-types) a
     </Tabs.Tab>
 </Tabs>
 
-In accounts in the `Accounts` struct can be accessed within an instruction through the `Context`, using the `ctx.accounts` notation.
+Accounts within the `Accounts` struct are accessible in an instruction through
+the `Context`, using the `ctx.accounts` syntax.
 
 ```rust filename="lib.rs" copy showLineNumbers  /ctx.accounts.new_account/ /new_account/ /Initialize/ {15-22}
 use anchor_lang::prelude::*;
@@ -223,17 +246,25 @@ pub struct NewAccount {
 }
 ```
 
-When an instruction is invoked, the program performs the following actions:
+When an instruction in an Anchor program is called, the program performs the
+following checks:
 
-- Checks that the accounts passed into the instruction match the account types in the `Accounts` struct specified in the `Context` 
-- Checks the accounts against any additional constraints specified
+- **Account Type Verification**: It verifies that the accounts passed into the
+  instruction correspond to the account types defined in the Accounts struct in
+  the Context.
 
-If any checks fail, then the instruction fails and throws an error before it reaches the main logic of the function.
+- **Constraint Checks**: It checks the accounts against any additional
+  constraints specified.
+
+This helps ensure that the accounts provided by the client are valid. If any
+checks fail, then the instruction fails with an error before reaching the main
+logic of the function.
 
 ### #[account]
 
-The `#[account]` macro is applied to structs defining the structure of a custom data account type for the program.
-Each field in the struct represents a field that will be stored in the account data.
+The `#[account]` macro is applied to structs defining the format of a custom
+data account type within a program. Each field in the struct represents a field
+that will be stored in the account data.
 
 ```rust copy showLineNumbers {3}
 #[account]
@@ -242,11 +273,17 @@ pub struct NewAccount {
 }
 ```
 
-This macro implements various traits [detailed here](https://docs.rs/anchor-lang/latest/anchor_lang/attr.account.html). 
-The `#[account]` macro ensures that:
-- When an account is created, its owner is set to the program defined in `declare_id`.
-- An 8 byte discriminator, based on the account type, is added to the account data upon initialization.
-- Account data for the specific account type is automatically serialized and deserialized.
+This macro implements various traits
+[detailed here](https://docs.rs/anchor-lang/latest/anchor_lang/attr.account.html).
+The key functionalities of the `#[account]` macro include:
+
+- **Assign Ownership**: When creating an account, the ownership of the account
+  is automatically assigned to the program specified in the `declare_id`.
+- **Set Discriminator**: A unique 8-byte discriminator, specific to the account
+  type, is appended to the account data during its initialization. This helps in
+  differentiating account types and account validation.
+- **Data Serialization and Deserialization**: The account data corresponding to
+  the account type is automatically serialized and deserialized.
 
 ```rust filename="lib.rs" copy showLineNumbers /data/2,6 /NewAccount/ {24-27}
 use anchor_lang::prelude::*;
@@ -278,10 +315,18 @@ pub struct NewAccount {
 }
 ```
 
-The account discriminator is an 8 byte unique identifier for each account type. 
-It's derived from the SHA256 hash of the account type's name, using the first 8 bytes.
-In Anchor, the first 8 bytes of an account's data are always allocated for this discriminator.
+In Anchor, an account discriminator is an 8-byte identifier, unique to each
+account type. This identifier is derived from the first 8 bytes of the SHA256
+hash of the account type's name. The first 8 bytes in an account's data are
+specifically reserved for this discriminator.
 
-When an account is initialized, its discriminator is set to match the account type's discriminator. 
-When deserializing the account data, this discriminator is verified against the account type's discriminator. 
-A mismatch indicates an invalid account, resulting in an error.
+The discriminator is used during the following two scenarios:
+
+- `Initialization`: During the initialization of an account, the discriminator
+  is set with the account type's discriminator.
+- `Deserialization`: When account data is deserialized, the discriminator within
+  the data is checked against the expected discriminator of the account type.
+
+If there's a mismatch, it indicates that the client has provided an unexpected
+account. This mechanism serves as an account validation check in Anchor
+programs, ensuring the correct and expected accounts are used.

@@ -5,72 +5,62 @@ description: Anchor Javascript Anchor Types Reference
 
 ## Type Mapping
 
-This reference shows you how anchor maps rust types to javascript/typescript types in the client.
+This reference shows you how anchor maps rust types to javascript/typescript
+types in the client.
 
 ### `bool`
 
-| Rust Type        | JavaScript Type |
-|------------------|-----------------|
-| `bool`           | `bool`          |
+| Rust Type | JavaScript Type |
+| --------- | --------------- |
+| `bool`    | `bool`          |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init(true)
-  .rpc();
+await program.methods.init(true).rpc();
 ```
 
 ### `u64/u128/i64/i128`
 
-| Rust Type      | JavaScript Type |
-|----------------|-----------------|
-| `u64/u128`     | `anchor.BN`     |
-| `i64/i128`     | `anchor.BN`     |
+| Rust Type  | JavaScript Type |
+| ---------- | --------------- |
+| `u64/u128` | `anchor.BN`     |
+| `i64/i128` | `anchor.BN`     |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init(new anchor.BN(99))
-  .rpc();
-  ```
+await program.methods.init(new anchor.BN(99)).rpc();
+```
+
 Note: [BN.javascript Library](https://github.com/indutny/bn.javascript)
 
 ### `u8/u16/u32/i8/i16/i32`
 
-| Rust Type  | JavaScript Type |
-|------------|-----------------|
-| `u8`       | `number`        |
-| `u16`      | `number`        |
-| `u32`      | `number`        |
-| `i8`       | `number`        |
-| `i16`      | `number`        |
-| `i32`      | `number`        |
+| Rust Type | JavaScript Type |
+| --------- | --------------- |
+| `u8`      | `number`        |
+| `u16`     | `number`        |
+| `u32`     | `number`        |
+| `i8`      | `number`        |
+| `i16`     | `number`        |
+| `i32`     | `number`        |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init(99)
-  .rpc();
+await program.methods.init(99).rpc();
 ```
 
 ### `f32/f64`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `f32`     | `number`        |
 | `f64`     | `number`        |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init(1.0)
-  .rpc();
+await program.methods.init(1.0).rpc();
 ```
 
 ### `Enum`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `Enum`    | `object`        |
 
 ```rust filename="rust"
@@ -80,30 +70,22 @@ enum MyEnum {
     Three(u8, i16),
 };
 ```
+
 ```javascript filename="javascript"
-// Unit variant 
-await program
-  .methods
-  .init({ one: {} })
-  .rpc();
+// Unit variant
+await program.methods.init({ one: {} }).rpc();
 
 // Named variant
-await program
-  .methods
-  .init({ two: { val: 99 } })
-  .rpc();
+await program.methods.init({ two: { val: 99 } }).rpc();
 
 // Unnamed(tuple) variant
-await program
-  .methods
-  .init({ three: [12, -34] })
-  .rpc();
+await program.methods.init({ three: [12, -34] }).rpc();
 ```
 
 ### `Struct`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `Struct`  | `{ val: {} }`   |
 
 ```rust filename="rust"
@@ -111,48 +93,37 @@ struct MyStruct {
   val: u16,
 }
 ```
+
 ```javascript
-await program
-  .methods
-  .init({ val: 99 })
-  .rpc();
+await program.methods.init({ val: 99 }).rpc();
 ```
 
 ### `[T; N]`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `[T; N]`  | `[ T ]`         |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init([1, 2, 3])
-  .rpc();
+await program.methods.init([1, 2, 3]).rpc();
 ```
 
 ### `String`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `String`  | `string`        |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init("hello")
-  .rpc();
+await program.methods.init("hello").rpc();
 ```
 
 ### `Vec<T>`
 
 | Rust Type | JavaScript Type |
-|-----------|-----------------|
+| --------- | --------------- |
 | `Vec<T>`  | `[ T ]`         |
 
 ```javascript filename="javascript"
-await program
-  .methods
-  .init([1, 2, 3])
-  .rpc();
+await program.methods.init([1, 2, 3]).rpc();
 ```

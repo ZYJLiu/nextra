@@ -3,7 +3,11 @@ title: Release Notes
 description: Anchor - Release Notes
 ---
 
-Anchor keeps a [CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANGELOG.md) but it's not easy to make sense what has changed, what effect does the change have and how to migrate. This is where release notes comes in, an easy to digest and actionable view for each release.
+Anchor keeps a
+[CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANGELOG.md) but
+it's not easy to make sense what has changed, what effect does the change have
+and how to migrate. This is where release notes comes in, an easy to digest and
+actionable view for each release.
 
 ---
 
@@ -23,7 +27,8 @@ Anchor keeps a [CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANG
    avm install latest
    ```
 
-3. Update Anchor crate(s) to `0.29.0`. Optionally, run `cargo update` to update other dependencies to the latest compatible versions.
+3. Update Anchor crate(s) to `0.29.0`. Optionally, run `cargo update` to update
+   other dependencies to the latest compatible versions.
 
 4. Update TS package(s) to `0.29.0`.
 
@@ -32,7 +37,9 @@ Anchor keeps a [CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANG
 Minimum supported Solana version is now `1.16.0` because
 
 - All clusters including mainnet-beta are now running `^1.16`
-- There is a [compatibility issue](https://github.com/solana-labs/solana/issues/31960) between `1.14` and `1.16`
+- There is a
+  [compatibility issue](https://github.com/solana-labs/solana/issues/31960)
+  between `1.14` and `1.16`
 
 If you are still on Solana `1.14`, update by running:
 
@@ -42,7 +49,8 @@ solana-install init 1.17.0
 
 ### Override toolchain for the workspace
 
-`Anchor.toml` has a new section called `[toolchain]` that allows overriding the current toolchain versions inside the workspace.
+`Anchor.toml` has a new section called `[toolchain]` that allows overriding the
+current toolchain versions inside the workspace.
 
 ```toml
 [toolchain]
@@ -53,8 +61,11 @@ solana_version = "1.17.0" # Solana version to use
 #### Notes
 
 - Fields are optional.
-- `anchor_version` requires [`avm`](https://github.com/coral-xyz/anchor/tree/master/avm) to be installed.
-- Before this release, `anchor_version` and `solana_version` keys in `Anchor.toml` were being used for Docker verifiable builds only. Now, all commands work via the `[toolchain]` section.
+- `anchor_version` requires
+  [`avm`](https://github.com/coral-xyz/anchor/tree/master/avm) to be installed.
+- Before this release, `anchor_version` and `solana_version` keys in
+  `Anchor.toml` were being used for Docker verifiable builds only. Now, all
+  commands work via the `[toolchain]` section.
 
 ### Install CLI from commit with `avm`
 
@@ -96,9 +107,11 @@ anchor_version = "0.28.0-6cf200493a307c01487c7b492b4893e0d6f6cb23"
 
 ### Multiple files template
 
-Programs created with `anchor init` or `anchor new` have a single `lib.rs` file but not everyone prefers a single file approach for programs.
+Programs created with `anchor init` or `anchor new` have a single `lib.rs` file
+but not everyone prefers a single file approach for programs.
 
-The most popular way of splitting the program into multiple files looks something like the following:
+The most popular way of splitting the program into multiple files looks
+something like the following:
 
 ```
 ├── constants.rs
@@ -145,7 +158,8 @@ upgradeable = true
 
 ### Lamport utilities
 
-Transfering lamports from a PDA is quite complicated due to the types that are being used.
+Transfering lamports from a PDA is quite complicated due to the types that are
+being used.
 
 Instead of
 
@@ -173,11 +187,15 @@ you can
 let lamports = ctx.accounts.my_account.get_lamports();
 ```
 
-**Note:** The new methods are not only more ergonomic but they are also more performant than the previous examples. This is because `to_account_info` method clones the data internally but the new methods use a reference to the underlying data.
+**Note:** The new methods are not only more ergonomic but they are also more
+performant than the previous examples. This is because `to_account_info` method
+clones the data internally but the new methods use a reference to the underlying
+data.
 
 ### Type safe context bumps
 
-Before this release, `ctx.bumps` used to be a `BTreeMap<String, u8>` which doesn't provide type safety for the keys(account names).
+Before this release, `ctx.bumps` used to be a `BTreeMap<String, u8>` which
+doesn't provide type safety for the keys(account names).
 
 ```rs
 let bump = *ctx.bumps.get("my_account").unwrap();
@@ -189,7 +207,9 @@ With this release, there is an auto-generated struct that holds the bump values.
 let bump = ctx.bumps.my_account;
 ```
 
-**Note**: The new way is not only more intuitive but also is more performant. This is mainly because `BTreeMap` is heap-allocated and it has to resize and grow occasionally.
+**Note**: The new way is not only more intuitive but also is more performant.
+This is mainly because `BTreeMap` is heap-allocated and it has to resize and
+grow occasionally.
 
 ### `idl-build` feature
 
@@ -202,7 +222,8 @@ Add `idl-build` feature to your program's `Cargo.toml` to try it out.
 idl-build = ["anchor-lang/idl-build"]
 ```
 
-The IDL will be built automatically when you run `anchor build` but if you'd like to _only_ generate the IDL, run:
+The IDL will be built automatically when you run `anchor build` but if you'd
+like to _only_ generate the IDL, run:
 
 ```sh
 anchor idl build
@@ -210,7 +231,8 @@ anchor idl build
 
 #### Notes
 
-- All crates that are being used for the IDL generation needs to be added to the `idl-build` feature list.
+- All crates that are being used for the IDL generation needs to be added to the
+  `idl-build` feature list.
 
 ```toml
 [features]
@@ -222,10 +244,16 @@ idl-build = [
 ```
 
 - Compile time checks are supported.
-- External types from other Anchor programs are supported as long as the external crate has the `idl-build` feature(see `another-program/idl-build`).
-- Conflicting type names e.g. `some_module::MyType` and `another_module::MyType` can be used together.
-- Generation time is a lot slower compared to the default method(parsing) due to Rust compile times.
-- Even though most of it works great, some parts are still rough around the edges and you may encounter parts that are not fully ironed out. Please [create an issue](https://github.com/coral-xyz/anchor/issues) if you run into a problem.
+- External types from other Anchor programs are supported as long as the
+  external crate has the `idl-build` feature(see `another-program/idl-build`).
+- Conflicting type names e.g. `some_module::MyType` and `another_module::MyType`
+  can be used together.
+- Generation time is a lot slower compared to the default method(parsing) due to
+  Rust compile times.
+- Even though most of it works great, some parts are still rough around the
+  edges and you may encounter parts that are not fully ironed out. Please
+  [create an issue](https://github.com/coral-xyz/anchor/issues) if you run into
+  a problem.
 
 ### Type aliases
 
@@ -282,13 +310,18 @@ Generates the following IDL:
 }
 ```
 
-**Note:** This example only works with the default IDL generation method(parsing) for now because type aliases for default Rust types don't work properly with `idl-build`([#2640](https://github.com/coral-xyz/anchor/issues/2640)).
+**Note:** This example only works with the default IDL generation
+method(parsing) for now because type aliases for default Rust types don't work
+properly with
+`idl-build`([#2640](https://github.com/coral-xyz/anchor/issues/2640)).
 
 ### Export `mpl-token-metadata`
 
-`anchor-spl` with `metadata` feature enabled now exports the `mpl-token-metadata` crate.
+`anchor-spl` with `metadata` feature enabled now exports the
+`mpl-token-metadata` crate.
 
-**Note:** Consider removing the `mpl-token-metadata` dependency to reduce the possibility of having conflicting versions:
+**Note:** Consider removing the `mpl-token-metadata` dependency to reduce the
+possibility of having conflicting versions:
 
 ```diff
 [dependencies]
@@ -304,22 +337,29 @@ use anchor_spl::metadata::mpl_token_metadata;
 
 ### TypeScript SDK improvements
 
-1. `Program.addEventListener` method is now strongly typed -- correct types for the event names and the event returned from the callback instead of `any`.
+1. `Program.addEventListener` method is now strongly typed -- correct types for
+   the event names and the event returned from the callback instead of `any`.
 
-2. `anchor.workspace` now lazy loads programs on-demand. Programs that are not being used in the tests won't get loaded and therefore won't cause errors.
+2. `anchor.workspace` now lazy loads programs on-demand. Programs that are not
+   being used in the tests won't get loaded and therefore won't cause errors.
 
-3. JavaScript convention is to use camelCase for property names but programs are accessed via PascalCase e.g. `anchor.workspace.MyProgram` which is unintuitive. Both variations work in this release.
+3. JavaScript convention is to use camelCase for property names but programs are
+   accessed via PascalCase e.g. `anchor.workspace.MyProgram` which is
+   unintuitive. Both variations work in this release.
 
    ```ts
-   const camel = anchor.workspace.myProgram
-   const pascal = anchor.workspace.MyProgram
+   const camel = anchor.workspace.myProgram;
+   const pascal = anchor.workspace.MyProgram;
    ```
 
 4. Removed `assert` and `base64-js` dependency.
 
 ### New docker image
 
-The previous image([projectserum/build](https://hub.docker.com/r/projectserum/build)) is now deprecated, new image is [backpackapp/build](https://hub.docker.com/r/backpackapp/build).
+The previous
+image([projectserum/build](https://hub.docker.com/r/projectserum/build)) is now
+deprecated, new image is
+[backpackapp/build](https://hub.docker.com/r/backpackapp/build).
 
 To pull the latest image, run:
 
@@ -331,12 +371,19 @@ docker pull backpackapp/build:v0.29.0
 
 ### Enhanced performance
 
-`0.29.0` performance is noticably improved in all areas, the biggest one being [binary size](https://github.com/coral-xyz/anchor/blob/master/bench/BINARY_SIZE.md#0290) which is reduced ~36% compared to `0.28.0`!
+`0.29.0` performance is noticably improved in all areas, the biggest one being
+[binary size](https://github.com/coral-xyz/anchor/blob/master/bench/BINARY_SIZE.md#0290)
+which is reduced ~36% compared to `0.28.0`!
 
-Similar benchmarks can be found for [compute units](https://github.com/coral-xyz/anchor/blob/master/bench/COMPUTE_UNITS.md#0290) and [stack memory](https://github.com/coral-xyz/anchor/blob/master/bench/STACK_MEMORY.md#0290).
+Similar benchmarks can be found for
+[compute units](https://github.com/coral-xyz/anchor/blob/master/bench/COMPUTE_UNITS.md#0290)
+and
+[stack memory](https://github.com/coral-xyz/anchor/blob/master/bench/STACK_MEMORY.md#0290).
 
-**Note:** The benchmark results will vary between programs but the overall direction should be the same.
+**Note:** The benchmark results will vary between programs but the overall
+direction should be the same.
 
 ---
 
-See the full list of changes in the [CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANGELOG.md#0290---2023-10-16).
+See the full list of changes in the
+[CHANGELOG](https://github.com/coral-xyz/anchor/blob/master/CHANGELOG.md#0290---2023-10-16).
